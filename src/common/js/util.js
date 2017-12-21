@@ -18,8 +18,6 @@ export default {
         return context == null || context == "" || context == "undefined" ? "" : context;
     },
     formatDate: {
-
-
         format: function (date, pattern) {
             pattern = pattern || DEFAULT_PATTERN;
             return pattern.replace(SIGN_REGEXP, function ($0) {
@@ -56,6 +54,15 @@ export default {
             return null;
         }
 
+    },
+    getUserToken: function () {
+        var user = sessionStorage.getItem('user')
+        if(user){
+            user = JSON.parse(user)
+            return user.token;
+        }else{
+            return '';
+        }
     }
 
 };

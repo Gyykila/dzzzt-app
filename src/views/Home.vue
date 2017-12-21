@@ -91,6 +91,7 @@
                     var requestparams = { roleId: user.id, menusIds: null}
                     var param = new URLSearchParams()
                     param.append("params", JSON.stringify(requestparams))
+                    param.append("token", user.token)
                     getRoleMenu(param).then(result => {
                         let { msg, code, data } = result
                         if (code !== "SUCCESS") {

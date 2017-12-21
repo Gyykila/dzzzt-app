@@ -4,7 +4,7 @@
 			<el-tab-pane label="图片上传" name="first">
 				<el-button style="margin: 0px 10px 10px 0px;" size="small" type="primary" @click="submitUpload">上传到服务器</el-button>
 				<el-upload
-						action="https://jsonplaceholder.typicode.com/posts/"
+						action="http://localhost:7891/upload/save"
 						list-type="picture-card"
 						ref="upload"
 						multiple

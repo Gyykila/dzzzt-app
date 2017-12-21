@@ -97,7 +97,7 @@
 <script>
     import { getMenuTree,saveMenus,getRoleList,saveRoleMenu } from '../../api/api'
     import VueContextMenu from '../../components/VueContextMenu'
-
+	import $utils from '../../common/js/util'
 	let id = 0
     export default {
         components: {VueContextMenu},
@@ -184,8 +184,10 @@
                 })
             },
             onSaveMenu () {
+                var requestparams = {menus:this.treeMenu};
                 var param = new URLSearchParams();
-                param.append("params", JSON.stringify({menus:this.treeMenu}))
+                param.append("params", JSON.stringify(requestparams));
+                param.append("token", $utils.getUserToken())
                 saveMenus(param).then(result => {
                     let { msg, code, data } = result
 					this.$message({
@@ -211,6 +213,7 @@
                 var requestparams = { roleId: this.roleId, menusIds: checked};
                 var param = new URLSearchParams();
                 param.append("params", JSON.stringify(requestparams));
+                param.append("token", $utils.getUserToken())
                 saveRoleMenu(param).then(result => {
                     let { msg, code, data } = result;
                     this.$message({
@@ -226,47 +229,53 @@
                 this.roleMenu = this.listRole[0].menus
                 this.listRole.push({id:null,name:this.roleform.name,menus:[]})
                 this.role = this.roleform.name
-            }
+            },
+			initData() {
+                var requestparams = {};
+                var param = new URLSearchParams();
+                param.append("params", JSON.stringify(requestparams));
+                param.append("token", $utils.getUserToken());
+                getMenuTree(param).then(result => {
+                    let { msg, code, data } = result;
+                    if (code !== "SUCCESS") {
+                        this.$message({
+                            message: msg,
+                            type: 'error'
+                        });
+                    } else {
+                        this.treeMenu = data
+                    }
+                })
+				getRoleList(param).then(result => {
+					let { msg, code, data } = result;
+					if (code !== "SUCCESS") {
+						this.$message({
+							message: msg,
+							type: 'error'
+						});
+					} else {
+						this.listRole = data
+						this.role = this.listRole[0].name
+						this.roleId = this.listRole[0].id
+						this.roleMenu = this.listRole[0].menus
+						var s = [];
+						this.roleMenu.forEach(function(item){
+							if(item.hidden === false){
+								s.push(item.id)
+							}
+							item.children.forEach(function(child){
+								if(child.hidden === false){
+									s.push(child.id)
+								}
+							})
+						})
+						this.roleform.menusIDs = s;
+					}
+				})
+			}
         },
         mounted() {
-            getMenuTree().then(result => {
-                let { msg, code, data } = result;
-                if (code !== "SUCCESS") {
-                    this.$message({
-                        message: msg,
-                        type: 'error'
-                    });
-                } else {
-                    this.treeMenu = data
-                }
-            })
-            getRoleList().then(result => {
-                let { msg, code, data } = result;
-                if (code !== "SUCCESS") {
-                    this.$message({
-                        message: msg,
-                        type: 'error'
-                    });
-                } else {
-                    this.listRole = data
-					this.role = this.listRole[0].name
-                    this.roleId = this.listRole[0].id
-                    this.roleMenu = this.listRole[0].menus
-                    console.log(JSON.stringify(this.roleMenu))
-					var s = [];
-                    this.roleMenu.forEach(function(item){
-                        if(item.hidden === false){
-                            s.push(item.id)
-						}
-						item.children.forEach(function(child){
-                            if(child.hidden === false){
-                                s.push(child.id)
-                            }
-						})
-                    })
-					this.roleform.menusIDs = s;
-                }
-            })
+            this.initData()
         }
     }
 </script>
