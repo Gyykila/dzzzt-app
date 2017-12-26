@@ -25,8 +25,14 @@
 							<el-form-item label="路径">
 								<el-input v-model="form.path"></el-input>
 							</el-form-item>
+							<el-form-item label="ID">
+								<el-input-number v-model="form.id" :step="1"></el-input-number>
+							</el-form-item>
+							<el-form-item label="上级ID">
+								<el-input v-model="form.parent"></el-input>
+							</el-form-item>
 							<el-form-item label="显示顺序">
-								<el-input-number v-model="form.seq" :disabled="true"></el-input-number>
+								<el-input-number v-model="form.seq" :step="1"></el-input-number>
 							</el-form-item>
 							<el-form-item label="图标">
 								<el-select v-model="form.iconCls" filterable placeholder="请选择">
@@ -195,6 +201,7 @@
 						type: 'success'
 					});
                     this.$emit('refreshbizlines', null);
+                    this.initData();
                 });
 			},
             onDelete () {
@@ -221,6 +228,7 @@
                         type: 'info'
                     });
                     this.$emit('refreshbizlines', null);
+                    this.initData();
                 });
             },
             onAddRole() {

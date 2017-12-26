@@ -11,13 +11,13 @@
       <el-col :span="24" class="main">
           <section class="content-container">
             <el-row style="width:25%;float: left">
-              <el-col v-for="(o, index) in 1" :key="o">
+              <el-col v-for="(item, index) in list_one">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img src="../../assets/z2.jpg" class="image">
+                  <img :src="item.imgURL" class="image">
                   <div class="bottom">
-                    <p>自来也</p>
-                    <time class="time">{{ currentDate }}</time>
-                    <p class="address">重庆</p>
+                    <p>{{item.name}}</p>
+                    <time class="time">{{ item.imgDate }}</time>
+                    <p class="address">{{item.address}}</p>
                     <div class="more">
                       <i class="el-icon-more"></i>
                     </div>
@@ -27,13 +27,13 @@
             </el-row>
 
             <el-row style="width:25%;float: left">
-              <el-col v-for="(o, index) in 1" :key="o">
+              <el-col v-for="(item, index) in list_tow">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img src="../../assets/z3.jpg" class="image">
-                  <div class="bottom" >
-                    <p>二世祖</p>
-                    <time class="time">{{ currentDate }}</time>
-                    <p class="address">成都</p>
+                  <img :src="item.imgURL" class="image">
+                  <div class="bottom">
+                    <p>{{item.name}}</p>
+                    <time class="time">{{ item.imgDate }}</time>
+                    <p class="address">{{item.address}}</p>
                     <div class="more">
                       <i class="el-icon-more"></i>
                     </div>
@@ -43,13 +43,13 @@
             </el-row>
 
             <el-row style="width:25%;float: left;">
-              <el-col v-for="(o, index) in 1" :key="o">
+              <el-col v-for="(item, index) in list_thr">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img src="../../assets/z4.jpg" class="image">
+                  <img :src="item.imgURL" class="image">
                   <div class="bottom">
-                    <p>凯皇</p>
-                    <time class="time">{{ currentDate }}</time>
-                    <p class="address">大理</p>
+                    <p>{{item.name}}</p>
+                    <time class="time">{{ item.imgDate }}</time>
+                    <p class="address">{{item.address}}</p>
                     <div class="more">
                       <i class="el-icon-more"></i>
                     </div>
@@ -59,13 +59,13 @@
             </el-row>
 
             <el-row style="width:25%;float: left">
-              <el-col v-for="(o, index) in 1" :key="o">
+              <el-col v-for="(item, index) in list_for">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img src="../../assets/z5.jpg" class="image">
+                  <img :src="item.imgURL" class="image">
                   <div class="bottom">
-                    <p>丝带</p>
-                    <time class="time">{{ currentDate }}</time>
-                    <p class="address">青海</p>
+                    <p>{{item.name}}</p>
+                    <time class="time">{{ item.imgDate }}</time>
+                    <p class="address">{{item.address}}</p>
                     <div class="more">
                       <i class="el-icon-more"></i>
                     </div>
@@ -80,18 +80,64 @@
 </template>
 
 <script>
-    import util from '../../common/js/util'
+    import $utils from '../../common/js/util'
+    import {getIMGList} from '../../api/api'
+    import { Loading } from 'element-ui';
 
     export default {
         data() {
             return {
-                currentDate: util.formatDate.format(new Date(), 'yyyy-MM-dd')
+                list_one:null,
+                list_tow:null,
+                list_thr:null,
+                list_for:null,
+                index:0
             }
         },
         methods: {
             login: function () {
                 this.$router.push('/login');
             },
+            initData(){
+                var param = new URLSearchParams();
+                param.append("params", this.index);
+                getIMGList(param).then(result => {
+                    let { msg, code, data } = result;
+                    if (code !== "SUCCESS") {
+                        this.$message({
+                            message: msg,
+                            type: 'error'
+                        });
+                    } else {
+                        var list1 = []
+                        var list2 = []
+                        var list3 = []
+                        var list4 = []
+                        var i;
+                        data.forEach(function(item,index){
+                            item.imgDate = $utils.formatDate.format(new Date(item.imgDate),'yyyy-MM')
+                            if(item.id%4 == 0){
+                                list1.push(item)
+                            }else if(item.id%4 == 1){
+                                list2.push(item)
+                            }else if(item.id%4 == 2){
+                                list3.push(item)
+                            }else{
+                                list4.push(item)
+                            }
+                            i = item.id;
+                        });
+                        this.index = i
+                        this.list_one  = list1
+                        this.list_tow  = list2
+                        this.list_thr  = list3
+                        this.list_for  = list4
+                    }
+                })
+            }
+        },
+        mounted() {
+            this.initData()
         }
     };
 </script>

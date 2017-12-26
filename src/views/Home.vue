@@ -1,7 +1,7 @@
 <template>
 	<el-row class="container">
 		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+			<el-col :span="10" class="logo logo-width">
 				{{sysName}}
 			</el-col>
 			<el-col :span="4" class="userinfo">
@@ -15,10 +15,9 @@
 			</el-col>
 		</el-col>
 		<el-col :span="24" class="main">
-			<aside :class="menu-expanded">
+			<aside class="menu-expanded">
 				<!--导航菜单-->
-				<el-menu  class="el-menu-vertical-demo"
-						 unique-opened router v-show="!collapsed">
+				<el-menu router>
 					<template v-for="(item,index) in sysMenu" v-if="!item.hidden">
 						<el-submenu :index="index+''">
 							<template slot="title">
@@ -50,8 +49,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'测试应用',
-				collapsed:false,
+				sysName:'技术图库系统',
 				sysUserName: '123',
 				sysMenu: [],
 				form: {
@@ -74,7 +72,7 @@
 			logout: function () {
 				var _this = this;
 				this.$confirm('确认退出吗?', '提示', {
-					//type: 'warning'
+					type: 'warning'
 				}).then(() => {
 					sessionStorage.removeItem('user');
 					_this.$router.push('/splash');
@@ -159,10 +157,7 @@
 				}
 			}
 			.logo-width{
-				width:230px;
-			}
-			.logo-collapse-width{
-				width:60px
+				width:200px;
 			}
 			.tools{
 				padding: 0px 23px;
@@ -179,26 +174,13 @@
 			bottom: 0px;
 			overflow: hidden;
 			aside {
-				flex:0 0 230px;
-				width: 230px;
 				.el-menu{
 					height: 100%;
 				}
-				.collapsed{
-					width:60px;
-					.item{
-						position: relative;
-					}
-					.submenu{
-						position:absolute;
-						top:0px;
-						left:60px;
-						z-index:99999;
-						height:auto;
-						display:none;
-					}
-
-				}
+			}
+			.menu-expanded{
+				flex:0 0 200px;
+				width: 200px;
 			}
 			.content-container {
 				flex:1;
