@@ -1,17 +1,28 @@
 <template>
 	<el-row>
 		<el-col :span="4">
-			<el-tree
+			<el-table
 					:data="data"
-					:props="defaultProps"
-					@node-click="handleNodeClick"></el-tree>
+					max-height="500"
+					style="width: 100%"
+					:show-header="false"
+					highlight-current-row
+					@row-click="handleClick">
+				<el-table-column>
+					<template slot-scope="scope">
+						<div>
+							<span style="margin-left: 10px">{{ scope.row.name }}</span>
+						</div>
+					</template>
+				</el-table-column>
+			</el-table>
 		</el-col>
 		<el-col :span="20">
 			<el-tabs v-model="activeName2" type="card">
 				<el-tab-pane label="物料信息" name="first">
 					<el-form ref="form" :inline="true" :model="form" label-width="80px" size="mini">
 						<el-form-item label="代码">
-							<el-input v-model="form.name"></el-input>
+							<el-input v-model="form.code"></el-input>
 						</el-form-item>
 						<el-form-item label="名称">
 							<el-input v-model="form.name"></el-input>
@@ -20,19 +31,19 @@
 							<el-input v-model="form.name"></el-input>
 						</el-form-item>
 						<el-form-item label="规格型号">
-							<el-input v-model="form.name"></el-input>
+							<el-input v-model="form.model"></el-input>
 						</el-form-item>
 						<el-form-item label="物料属性">
-							<el-input v-model="form.name"></el-input>
+							<el-input v-model="form.property"></el-input>
 						</el-form-item>
 						<el-form-item label="物料分类">
-							<el-input v-model="form.name"></el-input>
+							<el-input v-model="form.classify"></el-input>
 						</el-form-item>
 						<el-form-item label="基本计量单位">
-							<el-input v-model="form.name"></el-input>
+							<el-input v-model="form.unit"></el-input>
 						</el-form-item>
 						<el-form-item label="国际号/材质/品牌">
-							<el-input v-model="form.name"></el-input>
+							<el-input v-model="form.brand"></el-input>
 						</el-form-item>
 					</el-form>
 						<el-button type="primary" @click="onSubmit">保存</el-button>
@@ -62,56 +73,55 @@
 </template>
 
 <script>
+    import {saveItem, getItemList} from '../../../api/api'
+    import $utils from '../../../common/js/util'
     export default {
         data() {
             return {
-                data: [{
-                    label: '一级 1',
-                    children: [{
-                        label: '二级 1-1',
-                        children: [{
-                            label: '三级 1-1-1'
-                        }]
-                    }]
-                }, {
-                    label: '一级 2',
-                    children: [{
-                        label: '二级 2-1',
-                        children: [{
-                            label: '三级 2-1-1'
-                        }]
-                    }, {
-                        label: '二级 2-2',
-                        children: [{
-                            label: '三级 2-2-1'
-                        }]
-                    }]
-                }, {
-                    label: '一级 3',
-                    children: [{
-                        label: '二级 3-1',
-                        children: [{
-                            label: '三级 3-1-1'
-                        }]
-                    }, {
-                        label: '二级 3-2',
-                        children: [{
-                            label: '三级 3-2-1'
-                        }]
-                    }]
-                }],
-                defaultProps: {
-                    children: 'children',
-                    label: 'label'
-                },
+                data: [],
                 activeName2: 'first',
                 form:{}
             };
         },
         methods: {
+            initData() {
+                var param = new URLSearchParams();
+                param.append("params", null);
+                param.append("token", $utils.getUserToken());
+                getItemList(param).then(result => {
+                    let { msg, code, data } = result;
+                    if (code !== "SUCCESS") {
+                        this.$message({
+                            message: msg,
+                            type: 'error'
+                        });
+                    } else {
+                        this.data = data
+                    }
+                })
+            },
+            handleClick(row, event, column) {
+                this.form = row
+			},
             handleNodeClick(data) {
                 console.log(data);
-            }
+            },
+            onSubmit() {
+                var param = new URLSearchParams();
+                param.append("params", JSON.stringify(this.form));
+                param.append("token", $utils.getUserToken());
+                saveItem(param).then(result => {
+                    let { msg, code, data } = result;
+					this.$message({
+						message: msg,
+						type: 'warning'
+					});
+                    this.initData();
+                })
+			}
+        },
+        mounted() {
+            this.initData()
         }
     };
 </script>

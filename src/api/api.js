@@ -1,7 +1,8 @@
 import axios from 'axios';
 
  // let base = 'http://1e659h7706.iok.la';
-let base = 'http://localhost:7891';
+ // let base = 'http://localhost:7891';
+let base = 'http://192.168.0.102:7891';
 //登录相关
 export const requestLogin = params => { return axios.post(`${base}/user/login`, params).then(res => res.data); };
 //角色相关
@@ -13,3 +14,6 @@ export const saveMenus = params => { return axios.post(`${base}/system/savemenus
 //图片相关
 export const getIMGSLList = params => { return axios.post(`${base}/upload/listSL`, params).then(res => res.data); };
 export const getIMGList = params => { return axios.post(`${base}/upload/list`, params).then(res => res.data); };
+//物料信息
+export const saveItem = params => { return axios.post(`${base}/item/save`, params).then(res => res.data); };
+export const getItemList = params => { return axios.post(`${base}/item/list`, params).then(res => res.data); };
