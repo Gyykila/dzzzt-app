@@ -9,7 +9,7 @@
 						ref="upload"
 						multiple
 						:on-preview="handlePictureCardPreview"
-						:on-change="handlePictureChange"
+						:on-change="onChange"
 						:auto-upload="false">
 						<i class="el-icon-plus"></i>
 				</el-upload>
@@ -27,7 +27,8 @@
             return {
                 activeName2: 'first',
                 dialogImageUrl: '',
-                dialogVisible: false
+                dialogVisible: false,
+				fileList:[]
             }
         },
         methods: {
@@ -38,9 +39,7 @@
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
-            },
-            handlePictureChange(file, list) {
-			}
+            }
         }
     }
 </script>

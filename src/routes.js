@@ -5,9 +5,6 @@ import Home from './views/Home.vue'
 import Main from './views/Main.vue'
 import MenuManager from './views/manager/MenuManager.vue'
 
-import standard from './views/gallery/standard/Main'
-import nonstandard from './views/gallery/nonstandard/Main'
-import project from './views/gallery/project/Main'
 
 import UploadIMG from './views/IMG/UploadIMG'
 import ListIMG from './views/IMG/ListIMG'
@@ -41,10 +38,7 @@ let routes = [
             { path: '/main', component: Main, name: '主页'},
             { path: '/MenuManager', component: MenuManager, name: '菜单管理' },
             { path: '/UploadIMG', component: UploadIMG, name: '图片上传' },
-            { path: '/ListIMG', component: ListIMG, name: '图片列表' },
-            { path: '/standard', component: standard, name: '标准图库' },
-            { path: '/nonstandard', component: nonstandard, name: '非标图库' },
-            { path: '/project', component: project, name: '项目图库' },
+            { path: '/ListIMG', component: ListIMG, name: '图片列表' }
         ]
     },
     {

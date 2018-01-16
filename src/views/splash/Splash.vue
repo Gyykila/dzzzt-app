@@ -13,7 +13,7 @@
             <el-row style="width:25%;float: left">
               <el-col v-for="(item, index) in list_one">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img :src="item.imgURL" class="image">
+                  <img :src="'http://1e659h7706.iok.la/upload/listimg?imgUrl='+encodeURI(item.imgURL)" class="image">
                   <div class="bottom">
                     <p>{{item.name}}</p>
                     <time class="time">{{ item.imgDate }}</time>
@@ -29,7 +29,7 @@
             <el-row style="width:25%;float: left">
               <el-col v-for="(item, index) in list_tow">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img :src="item.imgURL" class="image">
+                  <img :src="'http://1e659h7706.iok.la/upload/listimg?imgUrl='+encodeURI(item.imgURL)" class="image">
                   <div class="bottom">
                     <p>{{item.name}}</p>
                     <time class="time">{{ item.imgDate }}</time>
@@ -45,7 +45,7 @@
             <el-row style="width:25%;float: left;">
               <el-col v-for="(item, index) in list_thr">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img :src="item.imgURL" class="image">
+                  <img :src="'http://1e659h7706.iok.la/upload/listimg?imgUrl='+encodeURI(item.imgURL)" class="image">
                   <div class="bottom">
                     <p>{{item.name}}</p>
                     <time class="time">{{ item.imgDate }}</time>
@@ -61,7 +61,7 @@
             <el-row style="width:25%;float: left">
               <el-col v-for="(item, index) in list_for">
                 <el-card class="my-card" :body-style="{ padding:'0px'}">
-                  <img :src="item.imgURL" class="image">
+                  <img :src="'http://1e659h7706.iok.la/upload/listimg?imgUrl='+encodeURI(item.imgURL)" class="image">
                   <div class="bottom">
                     <p>{{item.name}}</p>
                     <time class="time">{{ item.imgDate }}</time>
@@ -82,7 +82,6 @@
 <script>
     import $utils from '../../common/js/util'
     import {getIMGList} from '../../api/api'
-    import { Loading } from 'element-ui';
 
     export default {
         data() {

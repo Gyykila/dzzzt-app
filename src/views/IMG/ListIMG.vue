@@ -14,7 +14,7 @@
 								<el-table-column>
 									<template slot-scope="scope">
 										<div>
-											<img :src="scope.row.imgSLURL" class="image">
+											<img :src="'http://1e659h7706.iok.la/upload/listimg?imgUrl='+encodeURI(scope.row.imgSLURL)" class="image">
 										</div>
 										<div style="float: right">
 											<i class="el-icon-time"></i>
@@ -33,6 +33,9 @@
 
 					<el-col :span="18">
 						<el-form ref="form" :model="form" label-width="80px">
+							<el-card>
+								<img :src="'http://1e659h7706.iok.la/upload/listimg?imgUrl='+encodeURI(form.imgURL)" class="cardImg">
+							</el-card>
 							<el-form-item label="图片标签">
 								<el-input v-model="form.name"></el-input>
 							</el-form-item>
@@ -58,7 +61,7 @@
 </template>
 
 <script>
-	import {getIMGSLList} from '../../api/api'
+	import {getIMGList} from '../../api/api'
     import $utils from '../../common/js/util'
 
     export default {
@@ -66,6 +69,8 @@
             return {
                 activeName2: 'first',
                 form:{},
+                dialogImageUrl: '',
+                dialogVisible: false,
 				SLIMGLsit:[]
             }
         },
@@ -74,7 +79,7 @@
                 var param = new URLSearchParams();
                 param.append("params", 0);
                 param.append("token", $utils.getUserToken());
-                getIMGSLList(param).then(result => {
+                getIMGList(param).then(result => {
                     let { msg, code, data } = result;
                     if (code !== "SUCCESS") {
                         this.$message({
@@ -86,6 +91,7 @@
                         this.SLIMGLsit.forEach(function (item) {
                             item.imgDate = $utils.formatDate.format(new Date(item.imgDate),'yyyy-MM')
                         })
+                        this.form = this.SLIMGLsit[0]
                     }
                 })
 			},
@@ -104,6 +110,9 @@
 		width: 60px;
 		height: 60px;
 		float: left;
+	}
+	.cardImg{
+		height: 250px;
 	}
 
 </style>
